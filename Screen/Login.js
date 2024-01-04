@@ -144,8 +144,6 @@ const styles = StyleSheet.create({
     width: 250,
     height: 200,
     resizeMode: 'contain',
-    // backgroundColor:'green',
-    // marginTop:hp('5'),
     marginBottom: hp('5'),
   },
   subtitleContainer: {
