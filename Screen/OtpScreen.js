@@ -4,6 +4,7 @@ import { initializeApp } from '@react-native-firebase/app';
 
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,Alert} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import Details from './Details';
 
 const OtpScreen = ({ route }) => {
     const { confirmation } = route.params;
@@ -23,6 +24,7 @@ const OtpScreen = ({ route }) => {
                 {
                     text: 'OK',
                     onPress: () => {
+                        navigation.navigate('DetailsScreen')
                         // Navigate to the next screen or perform any other action
                     },
                 },
