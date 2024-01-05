@@ -125,6 +125,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.continueButtonText}>Continue</Text>
         )}
       </TouchableOpacity>
+      {/* <TouchableOpacity onPress={()=>navigation.navigate('OtpScreen')}><Text>Hi</Text></TouchableOpacity> */}
     </LinearGradient>
   );
 };

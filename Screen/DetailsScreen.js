@@ -4,7 +4,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 
 const DetailsScreen = ({route}) => {
-  const {confirmation, phoneNumber} = route.params;
+  // const {confirmation, phoneNumber} = route.params;
   const [otp, setOtp] = useState('');
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false); // Added loading state
@@ -93,7 +93,7 @@ const DetailsScreen = ({route}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}> Verify Phone</Text>
-      <Text style={styles.title2}> Code is sent to {phoneNumber}</Text>
+      {/* <Text style={styles.title2}> Code is sent to {phoneNumber}</Text> */}
 
       <View style={styles.otpView}>
         <TextInput
@@ -251,6 +251,9 @@ const DetailsScreen = ({route}) => {
         ) : (
           <Text style={styles.btnTxt}>Verify And Proceed</Text>
         )}{' '}
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+        <Text>Hi</Text>
       </TouchableOpacity>
     </View>
   );
