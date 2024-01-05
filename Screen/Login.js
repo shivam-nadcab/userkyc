@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {initializeApp} from '@react-native-firebase/app';
+import React, { useState } from 'react';
+import { initializeApp } from '@react-native-firebase/app';
 import SmsRetriever from 'react-native-sms-retriever';
 import {
   View,
@@ -10,7 +10,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator 
+  ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -19,9 +19,9 @@ import {
 } from 'react-native-responsive-screen';
 import LottieView from 'lottie-react-native';
 import auth from '@react-native-firebase/auth';
-import {useNavigatcion} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirm, setConfirm] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -34,11 +34,11 @@ const Login = ({navigation}) => {
       result = result.replace(/\s/g, '');
       setPhoneNumber(result);
       console.log(result, 'pppp');
-      // setPhoneNumber(result)
     } catch (error) {
       console.log(JSON.stringify(error));
     }
   };
+
   async function signInWithPhoneNumber(phoneNumber) {
     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
     setConfirm(confirmation);
@@ -46,37 +46,38 @@ const Login = ({navigation}) => {
 
   const handleContinue = async () => {
     try {
-      // Validate phone number format (you may customize this based on your requirements)
       const phoneRegex = /^[0-9]{10}$/;
       if (!phoneRegex.test(phoneNumber)) {
         console.log('Invalid phone number format');
         return;
       }
-      setLoading(true); // Start loading
+      setLoading(true);
 
-      // Format the phone number for Firebase (assuming it's a 10-digit US number)
       const formattedPhoneNumber = `+91${phoneNumber}`;
 
-      // Send OTP using Firebase phone authentication
       const confirmation = await auth().signInWithPhoneNumber(
         formattedPhoneNumber,
       );
-      setPhoneNumber(''); // Clear the input after sending OTP
-
-      // Navigate to the OTP screen with confirmation object as a parameter
-      navigation.navigate('DetailsScreen', {confirmation,phoneNumber });
+      setPhoneNumber('');
+      navigation.navigate('DetailsScreen', { confirmation, phoneNumber });
     } catch (error) {
       console.error('Error sending OTP:', error.message);
-      // Handle error (show an alert, log, etc.)
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
+  };
+
+  const handlePhoneNumberChange = (val) => {
+    // Ensure that the user can only enter 10 digits
+    const formattedValue = val.replace(/[^0-9]/g, '').slice(0, 10);
+    setPhoneNumber(formattedValue);
   };
 
   return (
     <LinearGradient
       colors={['#fffafa', '#fffafa', '#fffafa']}
-      style={styles.linearGradient}>
+      style={styles.linearGradient}
+    >
       <View style={styles.textContainer}>
         <Text style={styles.title}>Login</Text>
       </View>
@@ -88,32 +89,38 @@ const Login = ({navigation}) => {
           style={styles.image}
         />
       </View>
+      <View style={styles.otpVerificationContainer}>
+        <Text style={styles.otpVerificationText}>OTP Verification</Text>
+      </View>
       <View style={styles.subtitleContainer}>
         <Text style={styles.subtitle} numberOfLines={2}>
-          You will receive a 6-digit code to verify next.
+          We will send you a one-time password on this mobile number.
         </Text>
       </View>
-      <View style={styles.inputContainer}>
-        <TouchableWithoutFeedback onPress={() => _onPhoneNumberPressed()}>
-          <TextInput
-            style={[styles.input,styles.shadowProp]}
-            placeholder="Enter your number"
-            placeholderTextColor="black"
-            keyboardType="numeric"
-            value={phoneNumber}
-            onChangeText={val => setPhoneNumber(val)}
-            onFocus={() => _onPhoneNumberPressed()}
-          />
-        </TouchableWithoutFeedback>
-        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
-          {loading ? (
-            <ActivityIndicator size="small" color="black" />
-          ) : (
-            <Text style={styles.continueButtonText}>Continue</Text>
-          )}
-        </TouchableOpacity>
+      <View style={styles.enterMobileNumberContainer}>
+        <Text style={styles.enterMobileNumberText}>Enter Mobile Number</Text>
+        <View style={styles.inputContainer}>
+          <TouchableWithoutFeedback onPress={() => _onPhoneNumberPressed()}>
+            <TextInput
+              style={[styles.input, styles.shadowProp]}
+              // placeholder="Mobile Number"
+              placeholderTextColor="black"
+              keyboardType="numeric"
+              value={phoneNumber}
+              maxLength={10}
+              onChangeText={(val) => handlePhoneNumberChange(val)}
+              onFocus={() => _onPhoneNumberPressed()}
+            />
+          </TouchableWithoutFeedback>
+        </View>
       </View>
-      {/* <TouchableOpacity style={{width:'100'}} onPress={_onPhoneNumberPressed}><Text style={{color:'black'}}>Get number</Text></TouchableOpacity> */}
+      <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+        {loading ? (
+          <ActivityIndicator size="small" color="black" />
+        ) : (
+          <Text style={styles.continueButtonText}>Continue</Text>
+        )}
+      </TouchableOpacity>
     </LinearGradient>
   );
 };
@@ -123,91 +130,104 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   textContainer: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'row',
-    // backgroundColor:'red'
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: 'black',
     marginTop: hp('5'),
-    // marginBottom: hp('5'),
   },
   imgContainer: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'row',
   },
-
   image: {
     width: 250,
     height: 200,
     resizeMode: 'contain',
-    marginBottom: hp('5'),
+    marginBottom: hp('2'),
+  },
+  otpVerificationContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp('1'),
+    marginBottom: hp('1'),
+  },
+  otpVerificationText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
   },
   subtitleContainer: {
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
-    width: wp('50%'),
-    // backgroundColor:'green',
+    width: wp('60%'),
     marginLeft: wp('25'),
   },
   subtitle: {
     fontSize: 16,
     color: '#373737',
-    textAlign:'center',
-    marginBottom: hp('5'),
+    textAlign: 'center',
+    marginBottom: hp('3'),
+  },
+  enterMobileNumberContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: hp('2'),
+  },
+  enterMobileNumberText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
   },
   inputContainer: {
-    display: 'flex',
-    // backgroundColor: 'yellow',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: wp('100%'), // Adjusted the width to 80% of the screen width
-    paddingHorizontal: wp('10%'), // Adjusted the paddingHorizontal to 10% of the screen width
-    backgroundColor:'white'
+    width: wp('70%'),
+    height: hp(8),
+    marginTop: hp(1),
   },
-
   input: {
-    width: '80%', // Set the width of the input to 70% of the parent width
+    width: '100%',
     height: 50,
     backgroundColor: '#fff',
-    borderWidth:2,
     borderRadius: 5,
     color: 'black',
     paddingHorizontal: 10,
-    marginBottom: 20,
-    flex:1
+    marginBottom: 10,
+    flex: 1,
+    fontSize: 20, // Set the font size to 18
+    fontWeight: 'bold', // Set the font weight to bold
+    textAlignVertical: 'center', // Center the text vertically
   },
   shadowProp: {
-    elevation: 5, // For Android
-    shadowColor: '#000', // For iOS
-    shadowOffset: { width: 0, height: 2 }, // For iOS
-    shadowOpacity: 0.2, // For iOS
-    shadowRadius: 3, // For iOS
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
-
   continueButton: {
     backgroundColor: '#ffdf00',
-    padding: 10,
+    padding: 5,
     borderRadius: 5,
-    marginLeft:4,
-    width: '30%', // Set the width of the button to 30% of the parent width
+    marginLeft: 4,
+    width: '70%',
     height: 50,
+    alignSelf: 'center',
   },
   continueButtonText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 20,
+    padding: 8,
+    fontWeight: '700',
     textAlign: 'center',
   },
 });
