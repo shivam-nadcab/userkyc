@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator 
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -23,6 +24,7 @@ import {useNavigatcion} from '@react-navigation/native';
 const Login = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirm, setConfirm] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const _onPhoneNumberPressed = async () => {
     try {
@@ -50,6 +52,7 @@ const Login = ({navigation}) => {
         console.log('Invalid phone number format');
         return;
       }
+      setLoading(true); // Start loading
 
       // Format the phone number for Firebase (assuming it's a 10-digit US number)
       const formattedPhoneNumber = `+91${phoneNumber}`;
@@ -61,10 +64,12 @@ const Login = ({navigation}) => {
       setPhoneNumber(''); // Clear the input after sending OTP
 
       // Navigate to the OTP screen with confirmation object as a parameter
-      navigation.navigate('OtpScreen', {confirmation});
+      navigation.navigate('DetailsScreen', {confirmation,phoneNumber });
     } catch (error) {
       console.error('Error sending OTP:', error.message);
       // Handle error (show an alert, log, etc.)
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -91,7 +96,7 @@ const Login = ({navigation}) => {
       <View style={styles.inputContainer}>
         <TouchableWithoutFeedback onPress={() => _onPhoneNumberPressed()}>
           <TextInput
-            style={styles.input}
+            style={[styles.input,styles.shadowProp]}
             placeholder="Enter your number"
             placeholderTextColor="black"
             keyboardType="numeric"
@@ -100,10 +105,12 @@ const Login = ({navigation}) => {
             onFocus={() => _onPhoneNumberPressed()}
           />
         </TouchableWithoutFeedback>
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={handleContinue}>
-          <Text style={styles.continueButtonText}>Continue</Text>
+        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+          {loading ? (
+            <ActivityIndicator size="small" color="black" />
+          ) : (
+            <Text style={styles.continueButtonText}>Continue</Text>
+          )}
         </TouchableOpacity>
       </View>
       {/* <TouchableOpacity style={{width:'100'}} onPress={_onPhoneNumberPressed}><Text style={{color:'black'}}>Get number</Text></TouchableOpacity> */}
@@ -165,25 +172,36 @@ const styles = StyleSheet.create({
     display: 'flex',
     // backgroundColor: 'yellow',
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     width: wp('100%'), // Adjusted the width to 80% of the screen width
     paddingHorizontal: wp('10%'), // Adjusted the paddingHorizontal to 10% of the screen width
+    backgroundColor:'white'
   },
 
   input: {
-    width: '70%', // Set the width of the input to 70% of the parent width
+    width: '80%', // Set the width of the input to 70% of the parent width
     height: 50,
-    backgroundColor: 'rgba(155, 155, 155, 0.5)',
+    backgroundColor: '#fff',
+    borderWidth:2,
     borderRadius: 5,
     color: 'black',
     paddingHorizontal: 10,
     marginBottom: 20,
+    flex:1
+  },
+  shadowProp: {
+    elevation: 5, // For Android
+    shadowColor: '#000', // For iOS
+    shadowOffset: { width: 0, height: 2 }, // For iOS
+    shadowOpacity: 0.2, // For iOS
+    shadowRadius: 3, // For iOS
   },
 
   continueButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#ffdf00',
     padding: 10,
     borderRadius: 5,
+    marginLeft:4,
     width: '30%', // Set the width of the button to 30% of the parent width
     height: 50,
   },

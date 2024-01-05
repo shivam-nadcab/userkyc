@@ -1,8 +1,13 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View,Alert} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
+import auth from '@react-native-firebase/auth';
 
-const Details = () => {
+const Details = ({route}) => {
+  const {confirmation,phoneNumber } = route.params;
+  const [otp, setOtp] = useState('');
+  const [count, setCount] = useState(0);
+
   const et1 = useRef();
   const et2 = useRef();
   const et3 = useRef();
@@ -16,8 +21,38 @@ const Details = () => {
   const [f4, setF4] = useState('');
   const [f5, setF5] = useState('');
   const [f6, setF6] = useState('');
+  
+  const handleVerify = async () => {
+    const enteredOtp = f1 + f2 + f3 + f4 + f5 + f6;
+    console.log(enteredOtp)
+    console.log(otp,'otp')
+    try {
+      // Verify the entered OTP
+      const credential = auth.PhoneAuthProvider.credential(
+        confirmation.verificationId,
+        enteredOtp,
+      );
+      console.log(otp,'otttt')
+      await auth().signInWithCredential(credential);
 
-  const [count, setCount] = useState(0);
+      // If verification is successful, display an alert
+      Alert.alert('Success', 'OTP is correct!', [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('HomeScreen');
+            // Navigate to the next screen or perform any other action
+          },
+        },
+      ]);
+    } catch (error) {
+      // If verification fails, display an error message
+      console.error('Error verifying OTP:', error.message);
+      Alert.alert('Error', 'Invalid OTP. Please try again.');
+    }
+  };
+console.log(f1,f2,f3,f4,f5,f6)
+console.log(typeof f1,'yy')
   useEffect(() => {
     const interval = setInterval(() => {
       if (count === 0) {
@@ -30,9 +65,31 @@ const Details = () => {
       clearInterval(interval);
     };
   }, [count]);
+
+  const handleResendOtp = async () => {
+    try {
+      if (confirmation) {
+        const newConfirmation = await auth().signInWithPhoneNumber(
+          confirmation._auth._phoneNumber,
+          confirmation._auth._appVerificationDisabledForTesting,
+        );
+        setCount(60); // Reset the countdown timer
+        Alert.alert('Success', 'OTP has been resent.');
+      } else {
+        // Handle the case where confirmation is null
+        console.error('Confirmation object is null.');
+      }
+    } catch (error) {
+      console.error('Error resending OTP:', error.message);
+      Alert.alert('Error', 'Failed to resend OTP. Please try again.');
+    }
+  };
+  
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> OTP verification</Text>
+      <Text style={styles.title}> Verify Phone</Text>
+      <Text style={styles.title2}> Code is sent to {phoneNumber}</Text>
+
       <View style={styles.otpView}>
         <TextInput
           ref={et1}
@@ -143,9 +200,8 @@ const Details = () => {
       </View>
       <View style={styles.resendView}>
         <Text style={{fontSize:20,fontWeight:'700',color:count==0?'blue':'gray'}}
-        onPress={()=>{
-          setCount(60)
-        }}
+          // setCount(60)
+          onPress={handleResendOtp}
         >Resend</Text>
       {count !==0  &&       <Text style={{marginLeft:20,fontSize:20}}>{count+" seconds"}</Text>}
       </View>
@@ -173,7 +229,9 @@ const Details = () => {
                 ? 'blue'
                 : '#949494',
           },
-        ]}>
+        ]}
+        onPress={handleVerify}
+        >
         <Text style={styles.btnTxt}>Verify Otp</Text>
       </TouchableOpacity>
     </View>
@@ -191,6 +249,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#000',
   },
+  title2:{
+    fontSize: 16,
+    marginTop: 30,
+    marginBottom:30,
+    alignSelf: 'center',
+    color: '#ccc',
+  },
   otpView: {
     width: '100%',
     justifyContent: 'center',
@@ -206,11 +271,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: '700',
+    color:'black'
+  },
+  shadowProp: {
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   verifyOtpBtn: {
     width: '90%',
     height: 55,
-    backgroundColor: 'blue',
+    backgroundColor: '#ffdf00',
     borderRadius: 20,
     alignSelf: 'center',
     marginTop: 50,
