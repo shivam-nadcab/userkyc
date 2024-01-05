@@ -45,6 +45,7 @@ const Login = ({ navigation }) => {
   }
 
   const handleContinue = async () => {
+    console.log('hi');
     try {
       const phoneRegex = /^[0-9]{10}$/;
       if (!phoneRegex.test(phoneNumber)) {
@@ -52,13 +53,14 @@ const Login = ({ navigation }) => {
         return;
       }
       setLoading(true);
-
+  
       const formattedPhoneNumber = `+91${phoneNumber}`;
-
+  
       const confirmation = await auth().signInWithPhoneNumber(
         formattedPhoneNumber,
       );
       setPhoneNumber('');
+      console.log('Navigating to DetailsScreen'); // Add a log statement
       navigation.navigate('DetailsScreen', { confirmation, phoneNumber });
     } catch (error) {
       console.error('Error sending OTP:', error.message);
@@ -66,6 +68,8 @@ const Login = ({ navigation }) => {
       setLoading(false);
     }
   };
+  
+  
 
   const handlePhoneNumberChange = (val) => {
     // Ensure that the user can only enter 10 digits
@@ -169,8 +173,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
-    width: wp('60%'),
-    marginLeft: wp('25'),
+    width: wp('65%'),
+    marginLeft: wp('20'),
   },
   subtitle: {
     fontSize: 16,

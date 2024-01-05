@@ -11,7 +11,6 @@ import {
   Alert,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import Details from './Details';
 import {useNavigation} from '@react-navigation/native';
 
 const OtpScreen = ({route}) => {

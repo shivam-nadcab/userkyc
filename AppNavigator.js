@@ -3,11 +3,11 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './Screen/Login';
 import OtpScreen from './Screen/OtpScreen';
-import Details from './Screen/Details';
 import KycOptionScreen from './Screen/KycOptionScreen';
 import HomeScreen from './Screen/HomeScreen';
 import PanCardVerification from './Screen/PanCardVerification';
 import AadharCardVerification from './Screen/AadharCardVerification';
+import DetailsScreen from './Screen/DetailsScreen';
 
 
 const Stack = createStackNavigator();
@@ -17,7 +17,7 @@ const AppNavigator = () => {
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="DetailsScreen"
-        component={Details}
+        component={DetailsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

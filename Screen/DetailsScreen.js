@@ -1,12 +1,13 @@
-import {StyleSheet, Text, TouchableOpacity, View,Alert} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 
-const Details = ({route}) => {
-  const {confirmation,phoneNumber } = route.params;
+const DetailsScreen = ({route}) => {
+  const {confirmation, phoneNumber} = route.params;
   const [otp, setOtp] = useState('');
   const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false); // Added loading state
 
   const et1 = useRef();
   const et2 = useRef();
@@ -21,18 +22,20 @@ const Details = ({route}) => {
   const [f4, setF4] = useState('');
   const [f5, setF5] = useState('');
   const [f6, setF6] = useState('');
-  
+
   const handleVerify = async () => {
+    setLoading(true); // Start loading
+
     const enteredOtp = f1 + f2 + f3 + f4 + f5 + f6;
-    console.log(enteredOtp)
-    console.log(otp,'otp')
+    console.log(enteredOtp);
+    console.log(otp, 'otp');
     try {
       // Verify the entered OTP
       const credential = auth.PhoneAuthProvider.credential(
         confirmation.verificationId,
         enteredOtp,
       );
-      console.log(otp,'otttt')
+      console.log(otp, 'otttt');
       await auth().signInWithCredential(credential);
 
       // If verification is successful, display an alert
@@ -49,10 +52,12 @@ const Details = ({route}) => {
       // If verification fails, display an error message
       console.error('Error verifying OTP:', error.message);
       Alert.alert('Error', 'Invalid OTP. Please try again.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
-console.log(f1,f2,f3,f4,f5,f6)
-console.log(typeof f1,'yy')
+  console.log(f1, f2, f3, f4, f5, f6);
+  console.log(typeof f1, 'yy');
   useEffect(() => {
     const interval = setInterval(() => {
       if (count === 0) {
@@ -84,7 +89,7 @@ console.log(typeof f1,'yy')
       Alert.alert('Error', 'Failed to resend OTP. Please try again.');
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}> Verify Phone</Text>
@@ -199,11 +204,21 @@ console.log(typeof f1,'yy')
         />
       </View>
       <View style={styles.resendView}>
-        <Text style={{fontSize:20,fontWeight:'700',color:count==0?'blue':'gray'}}
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '700',
+            color: count == 0 ? 'blue' : 'gray',
+          }}
           // setCount(60)
-          onPress={handleResendOtp}
-        >Resend</Text>
-      {count !==0  &&       <Text style={{marginLeft:20,fontSize:20}}>{count+" seconds"}</Text>}
+          onPress={handleResendOtp}>
+          Resend
+        </Text>
+        {count !== 0 && (
+          <Text style={{marginLeft: 20, fontSize: 20}}>
+            {count + ' seconds'}
+          </Text>
+        )}
       </View>
       <TouchableOpacity
         disabled={
@@ -230,15 +245,18 @@ console.log(typeof f1,'yy')
                 : '#949494',
           },
         ]}
-        onPress={handleVerify}
-        >
-        <Text style={styles.btnTxt}>Verify Otp</Text>
+        onPress={handleVerify}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.btnTxt}>Verify And Proceed</Text>
+        )}{' '}
       </TouchableOpacity>
     </View>
   );
 };
 
-export default Details;
+export default DetailsScreen;
 
 const styles = StyleSheet.create({
   container: {},
@@ -249,10 +267,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: '#000',
   },
-  title2:{
+  title2: {
     fontSize: 16,
     marginTop: 30,
-    marginBottom:30,
+    marginBottom: 30,
     alignSelf: 'center',
     color: '#ccc',
   },
@@ -271,7 +289,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: '700',
-    color:'black'
+    color: 'black',
   },
   shadowProp: {
     shadowColor: '#171717',
@@ -293,10 +311,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
   },
-  resendView:{
-flexDirection:'row',
-alignSelf:'center',
-marginTop:30,
-marginBottom:30
+  resendView: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 30,
   },
 });
