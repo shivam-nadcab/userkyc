@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { initializeApp } from '@react-native-firebase/app';
+import React, {useState} from 'react';
+import {initializeApp} from '@react-native-firebase/app';
 import SmsRetriever from 'react-native-sms-retriever';
 import {
   View,
@@ -19,9 +19,9 @@ import {
 } from 'react-native-responsive-screen';
 import LottieView from 'lottie-react-native';
 import auth from '@react-native-firebase/auth';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
-const Login = ({ navigation }) => {
+const Login = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirm, setConfirm] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -53,25 +53,23 @@ const Login = ({ navigation }) => {
         return;
       }
       setLoading(true);
-  
+
       const formattedPhoneNumber = `+91${phoneNumber}`;
-  
+
       const confirmation = await auth().signInWithPhoneNumber(
         formattedPhoneNumber,
       );
       setPhoneNumber('');
       console.log('Navigating to DetailsScreen'); // Add a log statement
-      navigation.navigate('DetailsScreen', { confirmation, phoneNumber });
+      navigation.navigate('DetailsScreen', {confirmation, phoneNumber});
     } catch (error) {
       console.error('Error sending OTP:', error.message);
     } finally {
       setLoading(false);
     }
   };
-  
-  
 
-  const handlePhoneNumberChange = (val) => {
+  const handlePhoneNumberChange = val => {
     // Ensure that the user can only enter 10 digits
     const formattedValue = val.replace(/[^0-9]/g, '').slice(0, 10);
     setPhoneNumber(formattedValue);
@@ -80,8 +78,7 @@ const Login = ({ navigation }) => {
   return (
     <LinearGradient
       colors={['#fffafa', '#fffafa', '#fffafa']}
-      style={styles.linearGradient}
-    >
+      style={styles.linearGradient}>
       <View style={styles.textContainer}>
         <Text style={styles.title}>Login</Text>
       </View>
@@ -103,19 +100,25 @@ const Login = ({ navigation }) => {
       </View>
       <View style={styles.enterMobileNumberContainer}>
         <Text style={styles.enterMobileNumberText}>Enter Mobile Number</Text>
+        <View style={[styles.mainCont, styles.shadowProp]}>
+        <View style={styles.inputContainer2}>
+          <Text style={[styles.input2]}>+91</Text>
+        </View>
         <View style={styles.inputContainer}>
           <TouchableWithoutFeedback onPress={() => _onPhoneNumberPressed()}>
+            
             <TextInput
-              style={[styles.input, styles.shadowProp]}
+              style={[styles.input]}
               // placeholder="Mobile Number"
               placeholderTextColor="black"
               keyboardType="numeric"
               value={phoneNumber}
               maxLength={10}
-              onChangeText={(val) => handlePhoneNumberChange(val)}
+              onChangeText={val => handlePhoneNumberChange(val)}
               onFocus={() => _onPhoneNumberPressed()}
             />
           </TouchableWithoutFeedback>
+        </View>
         </View>
       </View>
       <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
@@ -169,6 +172,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
   },
+
   subtitleContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -194,28 +198,62 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
   },
-  inputContainer: {
-    width: wp('70%'),
+  mainCont:{
+    display:'flex',
+    flexDirection:'row',
+    backgroundColor: '#fff',
+    borderRadius: 5,
     height: hp(8),
     marginTop: hp(1),
   },
+  inputContainer: {
+    width: wp('50%'),
+    // height: hp(8),
+    // marginTop: hp(1),
+  },
   input: {
     width: '100%',
-    height: 50,
-    backgroundColor: '#fff',
-    borderRadius: 5,
+    // height: 50,
+    // backgroundColor: '#fff',
+    // borderRadius: 5,
     color: 'black',
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    // paddingHorizontal: 10,
+    // marginBottom: 10,
     flex: 1,
-    fontSize: 20, // Set the font size to 18
-    fontWeight: 'bold', // Set the font weight to bold
-    textAlignVertical: 'center', // Center the text vertically
+    fontSize: 20, 
+    fontWeight: 'bold', 
+    textAlignVertical: 'center', 
   },
   shadowProp: {
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  inputContainer2: {
+    width: wp('20%'),
+    // height: hp(8),
+    // marginTop: hp(1),
+  },
+  input2: {
+    width: '100%',
+    // height: 50,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    color: 'black',
+    paddingHorizontal: 10,
+    // marginBottom: 10,
+    flex: 1,
+    textAlign:'center',
+    fontSize: 20, // Set the font size to 18
+    fontWeight: 'bold', // Set the font weight to bold
+    textAlignVertical: 'center', // Center the text vertically
+  },
+  shadowProp2: {
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 3,
   },
