@@ -61,7 +61,9 @@ const Login = ({navigation}) => {
       );
       setPhoneNumber('');
       console.log('Navigating to DetailsScreen'); // Add a log statement
-      navigation.navigate('DetailsScreen', {confirmation, phoneNumber});
+      // navigation.navigate('DetailsScreen', {confirmation, phoneNumber});
+      navigation.navigate('OtpScreen', {confirmation});
+
     } catch (error) {
       console.error('Error sending OTP:', error.message);
     } finally {
@@ -128,7 +130,7 @@ const Login = ({navigation}) => {
           <Text style={styles.continueButtonText}>Continue</Text>
         )}
       </TouchableOpacity>
-      {/* <TouchableOpacity onPress={()=>navigation.navigate('OtpScreen')}><Text>Hi</Text></TouchableOpacity> */}
+      {/* <TouchableOpacity style={{width:'100',backgroundColor:'red'}} onPress={()=>navigation.navigate('OtpScreen') }><Text>Hi</Text></TouchableOpacity> */}
     </LinearGradient>
   );
 };

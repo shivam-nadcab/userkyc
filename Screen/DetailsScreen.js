@@ -2,12 +2,16 @@ import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const DetailsScreen = ({route}) => {
-  // const {confirmation, phoneNumber} = route.params;
+  const {confirmation, phoneNumber} = route.params;
   const [otp, setOtp] = useState('');
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false); // Added loading state
+
+  const navigation = useNavigation();
+
 
   const et1 = useRef();
   const et2 = useRef();
@@ -38,16 +42,23 @@ const DetailsScreen = ({route}) => {
       console.log(otp, 'otttt');
       await auth().signInWithCredential(credential);
 
-      // If verification is successful, display an alert
       Alert.alert('Success', 'OTP is correct!', [
         {
           text: 'OK',
           onPress: () => {
-            navigation.navigate('HomeScreen');
-            // Navigate to the next screen or perform any other action
+            if (navigation) {
+              navigation.navigate('HomeScreen');
+            } else {
+              console.error('Navigation object is undefined.');
+            }
           },
         },
       ]);
+      // setTimeout(()=>{
+
+      //   navigation.navigate('HomeScreen');
+      // },2000)
+
     } catch (error) {
       // If verification fails, display an error message
       console.error('Error verifying OTP:', error.message);
@@ -93,8 +104,7 @@ const DetailsScreen = ({route}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}> Verify Phone</Text>
-      {/* <Text style={styles.title2}> Code is sent to {phoneNumber}</Text> */}
-
+      <Text style={styles.title2}> Code is sent to {phoneNumber}</Text>
       <View style={styles.otpView}>
         <TextInput
           ref={et1}
@@ -204,16 +214,17 @@ const DetailsScreen = ({route}) => {
         />
       </View>
       <View style={styles.resendView}>
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: '700',
-            color: count == 0 ? 'blue' : 'gray',
-          }}
-          // setCount(60)
-          onPress={handleResendOtp}>
-          Resend
-        </Text>
+        <TouchableOpacity onPress={handleResendOtp}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: '700',
+              color: count == 0 ? 'blue' : 'gray',
+            }}>
+            Resend
+          </Text>
+        </TouchableOpacity>
+
         {count !== 0 && (
           <Text style={{marginLeft: 20, fontSize: 20}}>
             {count + ' seconds'}
@@ -250,11 +261,11 @@ const DetailsScreen = ({route}) => {
           <ActivityIndicator size="small" color="#fff" />
         ) : (
           <Text style={styles.btnTxt}>Verify And Proceed</Text>
-        )}{' '}
+        )}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
-        <Text>Hi</Text>
-      </TouchableOpacity>
+      {/* <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+      <Text>Hi</Text>
+    </TouchableOpacity> */}
     </View>
   );
 };

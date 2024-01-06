@@ -1,129 +1,163 @@
+import React, {useEffect, useState} from 'react';
 import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    ActivityIndicator,
-    StatusBar,
-  } from 'react-native';
-  import React, {useEffect, useState} from 'react';
-  import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-  import AntDesign from 'react-native-vector-icons/AntDesign';
-  import Entypo from 'react-native-vector-icons/Entypo';
-  import LottieView from 'lottie-react-native';
-  import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-  } from 'react-native-responsive-screen';
-  import {useNavigation} from '@react-navigation/native';
-//   import {useDispatch, useSelector} from 'react-redux';
-  import Ionicons from 'react-native-vector-icons/Ionicons';
-  import Toast from 'react-native-toast-message';
-//   import userCollection from '../../Store/firebase/user';
-//   import axios from 'axios';
-//   import {setUserKycStatus} from '../../Store/authSlice';
-  import {Image} from 'react-native-ui-lib';
-  import {ScrollView} from 'react-native-gesture-handler';
-//   import HomeHeader from '../components/HomeScreen/HomeHeader';
-  import LinearGradient from 'react-native-linear-gradient';
-  
-  const PanCardVerification = () => {
-    // const {user} = useSelector(state => state.auth);
-    const [loading, setloading] = useState(false);
-    const [panNumber, setPanNumber] = useState('');
-    const [panHolderName, setPanHolderName] = useState('');
-    const [panCardError, setPanCardError] = useState('');
-    const [showLoader, setShowLoader] = useState(false);
-  
-    const navigation = useNavigation();
-    // const dispatch = useDispatch();
-  
-    // Regular expression pattern for a valid PAN card number
-    const panCardRegex = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
-  
-    // async function kycverifyPanNumber(panNumber) {
-    //   if (panCardRegex.test(panNumber) && user?.mobile) {
-    //     try {
-    //       setloading(true);
-    //       axios
-    //         .post(
-    //           'https://kyc-api.surepass.io/api/v1/pan/pan',
-    //           {
-    //             id_number: panNumber,
-    //           },
-    //           {
-    //             headers: {
-    //               'Content-Type': 'application/json',
-    //               Authorization:
-    //                 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY0MTI4OTg5NiwianRpIjoiMmFmODgwMWUtNTU0NC00NDMzLWJlNWYtOGU5ZmFlNThhNDQ4IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjoiZGV2LmJpdGZsYXNoQGFhZGhhYXJhcGkuaW8iLCJuYmYiOjE2NDEyODk4OTYsImV4cCI6MTk1NjY0OTg5NiwidXNlcl9jbGFpbXMiOnsic2NvcGVzIjpbInJlYWQiXX19.8-DTl7BMrqnimNXINKxRymjLp7tEyR96T4jLIG67STg',
-    //               responseType: 'json',
-    //             },
-    //           },
-    //         )
-    //         .then(async data => {
-    //           const res = data?.data;
-    //           if (res) {
-    //             const {pan_number, full_name} = res.data;
-    //             setPanHolderName(full_name);
-    //             const isexist = await userCollection.checkUser(user?.mobile);
-    //             if (isexist) {
-    //               const userdata = await userCollection.getUser(user?.mobile);
-    //               const uobj = {...userdata};
-    //               uobj.panNumber = pan_number;
-    //               uobj.panHolderName = full_name;
-    //               uobj.panKyc = 1; // Set panKyc to 1
-    //               await userCollection.updateUser({...uobj});
-    //               const user_kyc_status = {
-    //                 pankyc: 1,
-    //                 aadharkyc: 0,
-    //                 aadhardockyc: 0,
-    //               };
-    //               dispatch(setUserKycStatus(user_kyc_status));
-    //               setloading(false);
-    //               // handleSaveAndNext();
-    //             }
-    //           }
-    //         })
-    //         .catch(error => {
-    //           console.error(error);
-    //         });
-    //     } catch (e) {
-    //       setloading(false);
-    //       Toast.show({
-    //         type: 'error',
-    //         text1: 'Something went wrong',
-    //         text2: 'Please try again',
-    //       });
-    //       console.log('inside catch');
-    //       console.log(e, 'error in checkpan ');
-    //     }
-    //   } else {
-    //     setloading(false);
-    //     setPanCardError('Invalid Pan Number');
-    //     Toast.show({
-    //       type: 'error',
-    //       text1: 'Invalid Pan Number',
-    //       text2: 'PAN Number should be in the format ABCDE1234F',
-    //     });
-    //   }
-    // }
-  
-    // useEffect(() => {
-    //   // setloading(true)
-    //   if (panNumber.length === 10) {
-    //     setShowLoader(true);
-    //     kycverifyPanNumber(panNumber);
-    //   }
-    //   setTimeout(() => {
-    //     setShowLoader(false);
-    //   }, 2000);
-    // }, [panNumber]);
-    // const handleSaveAndNext = () => {
-    //   navigation.navigate('kyc');
-    // };
-  
-    return (
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+  PermissionsAndroid,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Modal from 'react-native-modal';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Toast from 'react-native-toast-message';
+// import {useDispatch, useSelector} from 'react-redux';
+// import userCollection from '../../Store/firebase/user';
+// import storage from '@react-native-firebase/storage';
+import {useNavigation} from '@react-navigation/native';
+// import {setUserKycStatus} from '../../Store/authSlice';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {ScrollView} from 'react-native-gesture-handler';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import LinearGradient from 'react-native-linear-gradient';
+// import HomeHeader from '../components/HomeScreen/HomeHeader';
+
+const ManualKycUploadDoc = ({route}) => {
+  const [frontPhoto, setFrontPhoto] = useState();
+  const [backPhoto, setBackPhoto] = useState();
+  const [visible, setVisible] = useState(false);
+  const [uploadType, setUploadType] = useState(null);
+  const [loader, setLoader] = useState(false);
+  // const {user} = useSelector(state => state.auth);
+  const navigation = useNavigation();
+  // const dispatch = useDispatch();
+  // const {documentType} = route.params;
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  let options = {
+    saveToPhotos: true,
+    mediaType: 'photo',
+  };
+
+  const openCamera = async () => {
+    console.log('inside camera')
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const result = await launchCamera(options);
+      setFrontPhoto(result.assets[0].uri);
+      // console.log(result.assets[0].uri, 'opencamera pic path');
+    }
+  };
+
+  const openGallery = async () => {
+    const result = await launchImageLibrary(options);
+    setFrontPhoto(result.assets[0].uri);
+    // console.log(result.assets[0].uri, 'gallery ui 1');
+  };
+
+  const openCamera2 = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const result = await launchCamera(options);
+      setBackPhoto(result.assets[0].uri);
+      // console.log(result.assets[0].uri, 'opencamera222 pic path');
+    }
+  };
+
+  const openGallery2 = async () => {
+    const result = await launchImageLibrary(options);
+    setBackPhoto(result.assets[0].uri);
+    // console.log(result.assets[0].uri, 'gallery ui 2');
+  };
+
+  const uploadFrontAdharCardHandler = () => {
+    setUploadType('front');
+    setVisible(true);
+    setIsButtonDisabled(true);
+  };
+
+  const uploadBackAdharCardHandler = () => {
+    setUploadType('back');
+    setVisible(true);
+    setIsButtonDisabled(true);
+  };
+
+  const submitDocument = async () => {
+    if (frontPhoto && backPhoto) {
+      // Toast.show({
+      //   type: 'success',
+      //   text1: 'Your Documents are Uploded',
+      //   // text2: 'You will be updated soon',
+      // });
+      setLoader(true);
+      const userNumber = user.mobile;
+      const userName = user.name;
+
+      // Remove the local file path prefix (e.g., file:///data/user/0/com.nute/cache/)
+      const frontPhotoName = frontPhoto.replace(/^.*[\\\/]/, '');
+      const backPhotoName = backPhoto.replace(/^.*[\\\/]/, '');
+
+      // Construct the custom Firebase Storage paths
+      const pathToFile1 = `documentsImg/${userName}_${userNumber}/${frontPhotoName}`;
+      const pathToFile2 = `documentsImg/${userName}_${userNumber}/${backPhotoName}`;
+
+      // Reference for Firebase Storage
+      const reference1 = storage().ref(pathToFile1);
+      const reference2 = storage().ref(pathToFile2);
+
+      try {
+        // Upload the files to Firebase Storage
+        await reference1.putFile(frontPhoto);
+        await reference2.putFile(backPhoto);
+
+        const userdata = await userCollection.getUser(userNumber);
+        const uobj = {...userdata};
+        uobj.aadharDocKyc = 1;
+        await userCollection.updateUser({...uobj});
+
+        const user_kyc_status = {
+          aadharkyc: 1,
+          pankyc: 1,
+          aadhardockyc: 1,
+        };
+        setLoader(true);
+        dispatch(setUserKycStatus(user_kyc_status));
+        setLoader(false);
+        navigation.navigate('UploadDocumentSingle');
+      } catch (error) {
+        console.error('Error uploading files:', error);
+        setLoader(false);
+      }
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Upload Both Side Image',
+        text2: 'Please select all required photos.',
+      });
+      console.log('Please select all required photos.');
+    }
+  };
+
+  useEffect(() => {
+    if (frontPhoto && backPhoto) {
+      setIsButtonDisabled(false);
+    }
+  }, [submitDocument]);
+
+  return (
+    <>
       <LinearGradient
         colors={[
           '#d6fffd',
@@ -139,356 +173,347 @@ import {
         ]}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
-        style={{paddingBottom: wp(3), flex: 1}}>
+        style={{flex: 1}}>
+        {/* <StatusBar backgroundColor="#f3f4f8" barStyle="dark-content" /> */}
         <View style={styles.header}>
           {/* <HomeHeader
             icons={true}
             iconName={'arrow-left'}
             size={wp(7)}
-            title={'Verify KYC'}
-            TextTitle={true}
+            // title={'Verify KYC'}
+            // TextTitle={true}
             // RightHeaderName={true}
             // RheaderName={'Done'}
-            TextTitleStyle={{textAlign: 'left'}}
+            // TextTitleStyle={{textAlign: 'left'}}
             // leftIocnsSubScreen={false}
             // LeftIconsName={'magnify'}
           /> */}
-          {/* <AntDesign name="arrowleft" size={22} color={'#000'} />
-            <Text
-              style={{
-                color: '#000',
-                fontSize: wp(5),
-                fontWeight: '600',
-                marginBottom: wp(1),
-                marginStart: wp(2),
-              }}>
-              Verify KYC
-            </Text> */}
+          {/* <MaterialCommunityIcons
+            name="keyboard-backspace"
+            size={30}
+            color={'#000'}
+            onPress={() => navigation.goBack()}
+          /> */}
         </View>
-  
-        {/* pancard ui */}
         <ScrollView>
-          <View style={styles.pageWrapper}>
-            <Text
-              style={{
-                color: '#000',
-                fontSize: wp(4.5),
-                fontWeight: '600',
-                marginBottom: wp(1),
-              }}>
-              Verify Pan Card
-            </Text>
-            <Text style={{color: '#666', fontSize: wp(3.5)}}>
-              To ensure the security of your account and prevent fraud, Identity
-              verification is required
-            </Text>
-          </View>
-          <View style={{marginVertical: wp(8)}}>
-            <Image
-              resizeMode="contain"
-              style={{width: '100%', height: 180}}
-              source={require('../assets/image/pancard-dummy.png')}
-            />
-          </View>
-  
-          <View
-            style={{
-              marginHorizontal: wp(5),
-              // flex: 0.95,
-            }}>
-            <View style={styles.input}>
-              <TextInput
-                placeholder="Enter Pan Number"
-                placeholderTextColor="#999"
-                autoCapitalize="characters"
-                value={panNumber}
-                onChangeText={text => setPanNumber(text)}
-                style={{flex: 0.94}}
-                keyboardType="default"
-                color={'#000'}
-              />
-  
-              <View>
-                {showLoader && (
-                  <ActivityIndicator
-                    size={20}
-                    color={'#25d366'}
-                    // style={{marginTop: wp(5)}}
-                  />
-                )}
-              </View>
-            </View>
-  
-            {panHolderName ? (
-              <>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    paddingVertical: wp(8),
-                  }}>
-                  <View
-                    style={{
-                      width: '80%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                    }}>
-                    <View>
-                      <Image
-                        source={require('../assets/image/approved-shield.png')}
-                        style={{
-                          width: wp(6),
-                          height: wp(6),
-                        }}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        color: '#333',
-                        paddingHorizontal: 8,
-                        fontSize: 22,
-                        textTransform: 'capitalize',
-                      }}>
-                      {panHolderName}
-                    </Text>
-                  </View>
-                </View>
-              </>
-            ) : (
-              <>
-                <View style={styles.infowrapper}>
-                  <Text style={{color: '#000', marginBottom: wp(3)}}>Note</Text>
-  
-                  <View style={styles.displayHori}>
-                    <Entypo name="dot-single" size={18} color={'#666'} />
-                    <Text style={styles.listItem}>
-                      The Pan Number should consist of exactly 10 characters.
-                    </Text>
-                  </View>
-                  <View style={styles.displayHori}>
-                    <Entypo name="dot-single" size={18} color={'#666'} />
-                    <Text style={styles.listItem}>
-                      The initial five characters must be uppercase letters.
-                    </Text>
-                  </View>
-                  <View style={styles.displayHori}>
-                    <Entypo name="dot-single" size={18} color={'#666'} />
-                    <Text style={styles.listItem}>
-                      The subsequent four characters should be any numeric value
-                      ranging from 0 to 9.
-                    </Text>
-                  </View>
-                  <View style={styles.displayHori}>
-                    <Entypo name="dot-single" size={18} color={'#666'} />
-                    <Text style={styles.listItem}>
-                      The final (tenth) character must be an uppercase letter.
-                    </Text>
-                  </View>
-                  <View style={styles.displayHori}>
-                    <Entypo name="dot-single" size={18} color={'#666'} />
-                    <Text style={styles.listItem}>
-                      No white spaces are allowed in the Pan Number.
-                    </Text>
-                  </View>
-                </View>
-              </>
-            )}
-  
-            {/* {panCardError ? (
-            <>
-              <View style={styles.infowrapper}>
-               
-  
-                <View style={styles.displayHori}>
-                  <Entypo name="dot-single" size={18} color={'#666'} />
-                  <Text style={styles.listItem}>
-                    The Pan Number should consist of exactly 10 characters.
-                  </Text>
-                </View>
-                <View style={styles.displayHori}>
-                  <Entypo name="dot-single" size={18} color={'#666'} />
-                  <Text style={styles.listItem}>
-                    The initial five characters must be uppercase letters.
-                  </Text>
-                </View>
-                <View style={styles.displayHori}>
-                  <Entypo name="dot-single" size={18} color={'#666'} />
-                  <Text style={styles.listItem}>
-                    The subsequent four characters should be any numeric value
-                    ranging from 0 to 9.
-                  </Text>
-                </View>
-                <View style={styles.displayHori}>
-                  <Entypo name="dot-single" size={18} color={'#666'} />
-                  <Text style={styles.listItem}>
-                    The final (tenth) character must be an uppercase letter.
-                  </Text>
-                </View>
-                <View style={styles.displayHori}>
-                  <Entypo name="dot-single" size={18} color={'#666'} />
-                  <Text style={styles.listItem}>
-                    No white spaces are allowed in the Pan Number.
-                  </Text>
-                </View>
-              </View>
-            </>
-          ) : null} */}
-          </View>
-        </ScrollView>
-        <View
-          style={{
-            background: '#eee',
-            justifyContent: 'center',
-            flex: 1,
-          }}>
-          {panHolderName ? (
-            <TouchableOpacity style={styles.send} onPress={handleSaveAndNext}>
-              {loading ? (
-                <ActivityIndicator
-                  size={20}
-                  color={'#fff'}
-                  style={{marginHorizontal: 5}}
-                />
-              ) : null}
-              <Text style={{color: '#fff', fontSize: 15, fontWeight: '700'}}>
-                Save and Next
+          <>
+            <View style={styles.pageWrapper}>
+              <Text
+                style={{
+                  color: '#444',
+                  fontSize: wp(5),
+                  fontWeight: '600',
+                  marginBottom: wp(1),
+                }}>
+                Upload Documents
               </Text>
-            </TouchableOpacity>
-          ) : null}
+              <Text style={{color: '#666', fontSize: wp(3.5)}}>
+                Upload a color image of the entire document. Screenshot are not
+                allowed. JPG, JPEG, or PNG format only
+              </Text>
+
+              <View style={{marginBottom: wp(6)}}>
+                <View style={styles.adharImg}>
+                  {frontPhoto ? (
+                    <Image
+                      style={styles.imageStyle}
+                      source={{uri: frontPhoto}}
+                      resizeMode="contain"
+                    />
+                  ) : (
+                    <Image
+                      style={styles.imageStyle}
+                      source={{uri: frontPhoto}}
+                      resizeMode="contain"
+                    />
+                  )}
+                </View>
+                <TouchableOpacity
+                  style={{
+                    width: '99%',
+                    height: 40,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: '#f3f4f7',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    borderRadius: wp(1),
+                  }}
+                  onPress={uploadFrontAdharCardHandler}>
+                  <Feather name="upload" size={20} color="#333" />
+                  <Text
+                    style={{
+                      color: '#333',
+                      marginLeft: 10,
+                      fontSize: wp(4),
+                      // fontWeight: '600',
+                    }}>
+                    {/* Upload Front of {documentType} */}
+                    Upload Front of Pan Card
+
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View>
+                <View style={styles.adharImg}>
+                  {backPhoto ? (
+                    <Image
+                      style={styles.imageStyle}
+                      source={{uri: backPhoto}}
+                    />
+                  ) : (
+                    <Image
+                      style={styles.imageStyle}
+                      source={{uri: backPhoto}}
+                    />
+                  )}
+                </View>
+              </View>
+              <TouchableOpacity
+                style={{
+                  width: '99%',
+                  height: 40,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: '#f3f4f7',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  borderRadius: wp(1),
+                }}
+                onPress={uploadBackAdharCardHandler}>
+                <Feather name="upload" size={20} color="#333" />
+                <Text
+                  style={{
+                    color: '#333',
+                    marginLeft: 15,
+                    fontSize: wp(4),
+                  }}>
+                  {/* Upload Back of {documentType} */}
+                  Upload Back of Pan Card
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        </ScrollView>
+
+        <View style={styles.pageWrapper}>
+          <TouchableOpacity
+            style={[styles.send, isButtonDisabled ? styles.sendDisabled : null]}
+            disabled={isButtonDisabled}
+            // style={styles.send}
+            onPress={submitDocument}>
+            <Text
+              style={[
+                styles.sendBtnTxt,
+                isButtonDisabled ? styles.sendBtnTxtDisabled : null,
+              ]}>
+              Upload Documents and Proceed
+            </Text>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
-    );
-  };
-  
-  export default PanCardVerification;
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-  
-    header: {
-      width: '100%',
-      paddingVertical: 15,
-      paddingHorizontal: wp(4),
-    },
-  
-    pageWrapper: {
-      marginHorizontal: wp(6),
-      marginVertical: wp(2),
-    },
-  
-    profileCards: {
-      paddingHorizontal: wp(3),
-      marginHorizontal: wp(4),
-      paddingVertical: wp(3),
-      backgroundColor: '#fff',
-      marginVertical: hp(1),
-      color: '#444',
-      borderRadius: wp(2),
-      shadowColor: '#666',
-      shadowOffset: {
-        width: 0,
-        height: 7,
-      },
-      shadowOpacity: 0.41,
-      shadowRadius: 9.11,
-      elevation: 14,
-    },
-  
-    profileCardsInner: {
-      flexDirection: 'column',
-      // justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    button: {
-      padding: wp(2),
-      borderWidth: 0.5,
-      borderColor: '#000',
-      alignItems: 'center',
-      textAlign: 'center',
-      borderRadius: wp(5),
-      marginTop: wp(2),
-      width: wp(32),
-    },
-    buttonText: {
-      color: '#000',
-    },
-  
-    title: {
-      fontSize: wp(5),
-      fontWeight: '500',
-    },
-    titleBox: {
-      marginLeft: wp(7),
-    },
-    leftIocnStyle: {
-      // width: wp(15),
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-    },
-  
-    infowrapper: {
-      paddingHorizontal: wp(2),
-      paddingVertical: wp(4),
-      borderRadius: wp(4),
-      marginTop: wp(8),
-      borderColor: '#ccc',
-      borderWidth: 0.5,
-      marginHorizontal: wp(5),
-    },
-  
-    listItem: {
-      color: '#666',
-      fontSize: wp(3.2),
-      flexWrap: 'wrap',
-    },
-    bullet: {
-      fontSize: 13,
-      marginRight: 5,
-      color: '#333',
-    },
-    displayHori: {
-      flexDirection: 'row',
-      marginBottom: wp(2),
-      width: 260,
-    },
-    input: {
-      color: '#444',
-      height: hp(5),
-      backgroundColor: '#f3f4f7',
-      textTransform: 'uppercase',
-      width: '85%',
-      // borderWidth: 0.5,
-      // borderColor: '#ccc',
-      alignSelf: 'center',
-      paddingHorizontal: 10,
-      fontSize: 13,
-      borderRadius: 5,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: wp(3),
-    },
-  
-    send: {
-      alignSelf: 'center',
-      padding: 15,
-      backgroundColor: '#000',
-      borderRadius: 7,
-      width: '86%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      // marginBottom: 10,
-      flexDirection: 'row',
-      // marginTop: 130,
-    },
-  
-    errorLines: {
-      color: '#666',
-      fontSize: wp(3),
-      lineHeight: wp(5),
-    },
-  });
-  
+
+      {loader ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#000" />
+          <Text style={styles.loaderText}>Uploading Documents...</Text>
+        </View>
+      ) : null}
+
+      <Modal
+        isVisible={visible}
+        style={{width: '100%', marginLeft: 0, marginBottom: 0}}
+        onBackButtonPress={() => {
+          setVisible(false);
+        }}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            left: 0,
+            backgroundColor: 'white',
+            width: '100%',
+          }}>
+          <View style={{padding: 20}}>
+            <TouchableOpacity
+              style={{
+                width: '100%',
+                height: 50,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+              onPress={() => {
+                setVisible(false);
+                if (uploadType === 'front') {
+                  openCamera();
+                } else if (uploadType === 'back') {
+                  openCamera2();
+                }
+              }}>
+              <Feather
+                name="camera"
+                size={20}
+                color="#999"
+                style={{marginLeft: 10}}
+              />
+              <Text
+                style={{
+                  color: '#000',
+                  marginLeft: 15,
+                  fontSize: 18,
+                  fontWeight: '500',
+                }}>
+                Take Photo
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: '100%',
+                height: 50,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+              onPress={() => {
+                setVisible(false);
+                if (uploadType === 'front') {
+                  openGallery();
+                } else if (uploadType === 'back') {
+                  openGallery2();
+                }
+              }}>
+              <Feather
+                name="image"
+                size={20}
+                color="#999"
+                style={{marginLeft: 10}}
+              />
+              <Text
+                style={{
+                  color: '#000',
+                  marginLeft: 15,
+                  fontSize: 18,
+                  fontWeight: '500',
+                }}>
+                Choose Image
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setVisible(false);
+              }}
+              style={{
+                width: '100%',
+                height: 50,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Entypo
+                name="circle-with-cross"
+                size={22}
+                color="#999"
+                style={{marginLeft: 10}}
+              />
+              <Text
+                style={{
+                  color: '#000',
+                  marginLeft: 15,
+                  fontSize: 18,
+                  fontWeight: '500',
+                }}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+};
+
+export default ManualKycUploadDoc;
+
+const styles = StyleSheet.create({
+  container: {
+    // backgroundColor: '#fff',
+    flex: 0.98,
+  },
+
+  header: {
+    width: '100%',
+    paddingVertical: 15,
+    // backgroundColor: 'rgba(0,0,0,0.08)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: wp(5),
+  },
+  pageWrapper: {
+    marginHorizontal: wp(6),
+    marginBottom: wp(5),
+    // flex: 1,
+    // backgroundColor: '#ccc',
+  },
+
+  adharImg: {
+    backgroundColor: '#fff',
+    marginTop: wp(4),
+    marginBottom: wp(2),
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: '#ccc',
+    borderRadius: wp(3),
+  },
+  imageStyle: {
+    height: 145,
+    width: '98%',
+    // margin: 10,
+    borderRadius: 5,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  send: {
+    alignSelf: 'center',
+    padding: 10,
+    backgroundColor: '#000',
+    borderRadius: 7,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    flexDirection: 'row',
+    // marginTop: wp(10),
+  },
+
+  sendDisabled: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+
+  sendBtnTxt: {
+    color: '#fff',
+    fontWeight: 600,
+    fontSize: 15,
+  },
+  sendBtnTxtDisabled: {
+    color: '#000',
+    fontWeight: 'normal',
+  },
+  loaderContainer: {
+    // flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: wp(4),
+    fontWeight: '600',
+    color: '#000',
+  },
+});
