@@ -3,6 +3,10 @@ import React, {useEffect, useRef, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const DetailsScreen = ({route}) => {
   const {confirmation, phoneNumber} = route.params;
@@ -105,7 +109,7 @@ const DetailsScreen = ({route}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}> Verify Phone</Text>
-      <Text style={styles.title2}> Code is sent to {phoneNumber}</Text>
+      <Text style={styles.title2}> Code is sent to {phoneNumber} </Text>
       <View style={styles.otpView}>
         <TextInput
           ref={et1}
@@ -220,7 +224,7 @@ const DetailsScreen = ({route}) => {
             style={{
               fontSize: 20,
               fontWeight: '700',
-              color: count == 0 ? 'blue' : 'gray',
+              color: count == 0 ? '#ffdf00' : 'gray',
             }}>
             Resend
           </Text>
@@ -253,7 +257,7 @@ const DetailsScreen = ({route}) => {
               f4 !== '' &&
               f5 !== '' &&
               f6 !== ''
-                ? 'blue'
+                ? '#ffdf00'
                 : '#949494',
           },
         ]}
@@ -278,14 +282,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    marginTop: 100,
+    marginTop: wp(25),
     alignSelf: 'center',
     color: '#000',
   },
   title2: {
     fontSize: 16,
     marginTop: 30,
-    marginBottom: 30,
+    marginBottom: wp(10),
     alignSelf: 'center',
     color: '#ccc',
   },
@@ -293,11 +297,11 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     flexDirection: 'row',
-    marginTop: 100,
+    marginTop: wp(20),
   },
   inputView: {
-    width: 50,
-    height: 50,
+    width: wp(11),
+    height: hp(5.5),
     borderWidth: 0.5,
     borderRadius: 10,
     marginLeft: 10,
@@ -313,12 +317,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   verifyOtpBtn: {
-    width: '90%',
-    height: 55,
+    width: wp(90),
+    height: hp(7),
     backgroundColor: '#ffdf00',
     borderRadius: 20,
     alignSelf: 'center',
-    marginTop: 50,
+    marginTop: hp(5),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -329,7 +333,7 @@ const styles = StyleSheet.create({
   resendView: {
     flexDirection: 'row',
     alignSelf: 'center',
-    marginTop: 30,
-    marginBottom: 30,
+    marginTop: hp(4),
+    marginBottom: hp(4),
   },
 });
