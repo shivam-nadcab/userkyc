@@ -111,7 +111,7 @@ const Login = ({navigation}) => {
             
             <TextInput
               style={[styles.input]}
-              // placeholder="Mobile Number"
+              placeholder="Mobile Number"
               placeholderTextColor="black"
               keyboardType="numeric"
               value={phoneNumber}
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     color: 'black',
     // paddingHorizontal: 10,
     // marginBottom: 10,
+    marginLeft:wp(2),
     flex: 1,
     fontSize: 20, 
     fontWeight: 'bold', 
@@ -236,6 +237,9 @@ const styles = StyleSheet.create({
   inputContainer2: {
     width: wp('20%'),
     // height: hp(8),
+    backgroundColor:'#ccc',
+    opacity:0.5
+
     // marginTop: hp(1),
   },
   input2: {
