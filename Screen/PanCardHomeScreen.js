@@ -30,7 +30,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 // import HomeHeader from '../components/HomeScreen/HomeHeader';
 
-const ManualKycUploadDoc = ({route}) => {
+const PanCardHomeScreen = ({route}) => {
   const [frontPhoto, setFrontPhoto] = useState();
   const [backPhoto, setBackPhoto] = useState();
   const [visible, setVisible] = useState(false);
@@ -48,7 +48,7 @@ const ManualKycUploadDoc = ({route}) => {
   };
 
   const openCamera = async () => {
-    console.log('inside camera')
+    console.log('inside camera');
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
     );
@@ -156,6 +156,10 @@ const ManualKycUploadDoc = ({route}) => {
     }
   }, [submitDocument]);
 
+  const takePhoto=()=>{
+    navigation.navigate('PanCardVerification')
+  }
+
   return (
     <>
       <LinearGradient
@@ -198,106 +202,44 @@ const ManualKycUploadDoc = ({route}) => {
         <ScrollView>
           <>
             <View style={styles.pageWrapper}>
+            <Text
+                style={{
+                  color: '#444',
+                  fontSize: wp(5),
+                  fontWeight: '600',
+                  marginBottom: wp(5),
+                  alignSelf:'center',
+                  fontSize:wp(8)
+                }}>
+                Pan Card
+              </Text>
               <Text
                 style={{
                   color: '#444',
                   fontSize: wp(5),
                   fontWeight: '600',
-                  marginBottom: wp(1),
+                  marginBottom: wp(3),
                 }}>
-                Upload Documents
+                Upload Your Pan Card 
               </Text>
               <Text style={{color: '#666', fontSize: wp(3.5)}}>
-                Upload a color image of the entire document. Screenshot are not
+                Capture a live image or Upload a color image of the entire document. Screenshot are not
                 allowed. JPG, JPEG, or PNG format only
               </Text>
 
-              <View style={{marginBottom: wp(6)}}>
-                <View style={styles.adharImg}>
-                  {frontPhoto ? (
-                    <Image
-                      style={styles.imageStyle}
-                      source={{uri: frontPhoto}}
-                      resizeMode="contain"
-                    />
-                  ) : (
-                    <Image
-                      style={styles.imageStyle}
-                      source={{uri: frontPhoto}}
-                      resizeMode="contain"
-                    />
-                  )}
-                </View>
-                <TouchableOpacity
-                  style={{
-                    width: '99%',
-                    height: 40,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: '#f3f4f7',
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                    borderRadius: wp(1),
-                  }}
-                  onPress={uploadFrontAdharCardHandler}>
-                  <Feather name="upload" size={20} color="#333" />
-                  <Text
-                    style={{
-                      color: '#333',
-                      marginLeft: 10,
-                      fontSize: wp(4),
-                    }}>
-                    Upload Front of Pan Card
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* <View>
-                <View style={styles.adharImg}>
-                  {backPhoto ? (
-                    <Image
-                      style={styles.imageStyle}
-                      source={{uri: backPhoto}}
-                    />
-                  ) : (
-                    <Image
-                      style={styles.imageStyle}
-                      source={{uri: backPhoto}}
-                    />
-                  )}
-                </View>
-              </View> */}
-              {/* <TouchableOpacity
-                style={{
-                  width: '99%',
-                  height: 40,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  backgroundColor: '#f3f4f7',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                  borderRadius: wp(1),
-                }}
-                onPress={uploadBackAdharCardHandler}>
-                <Feather name="upload" size={20} color="#333" />
-                <Text
-                  style={{
-                    color: '#333',
-                    marginLeft: 15,
-                    fontSize: wp(4),
-                  }}>
-                  Upload Back of Pan Card
-                </Text>
-              </TouchableOpacity> */}
+              <TouchableOpacity
+                style={{marginTop:200,backgroundColor:'black',height:50,width:250}}
+                onPress={takePhoto}>
+                <Text style={{color:'white',textAlign:'center'}}>Take Photo</Text>
+              </TouchableOpacity>
             </View>
           </>
         </ScrollView>
 
         <View style={styles.pageWrapper}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[styles.send, isButtonDisabled ? styles.sendDisabled : null]}
             disabled={isButtonDisabled}
-            // style={styles.send}
             onPress={submitDocument}>
             <Text
               style={[
@@ -306,18 +248,18 @@ const ManualKycUploadDoc = ({route}) => {
               ]}>
               Upload Documents and Proceed
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </LinearGradient>
 
-      {loader ? (
+      {/* {loader ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color="#000" />
           <Text style={styles.loaderText}>Uploading Documents...</Text>
         </View>
-      ) : null}
+      ) : null} */}
 
-      <Modal
+      {/* <Modal
         isVisible={visible}
         style={{width: '100%', marginLeft: 0, marginBottom: 0}}
         onBackButtonPress={() => {
@@ -423,12 +365,12 @@ const ManualKycUploadDoc = ({route}) => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
 
-export default ManualKycUploadDoc;
+export default PanCardHomeScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -28,15 +28,15 @@ const OtpScreen = ({route}) => {
       await auth().signInWithCredential(credential);
 
       // If verification is successful, display an alert
-      Alert.alert('Success', 'OTP is correct!', [
-        {
-          text: 'OK',
-          onPress: () => {
-            navigation.navigate('HomeScreen');
-            // Navigate to the next screen or perform any other action
-          },
-        },
-      ]);
+      navigation.navigate('HomeScreen');
+      // Alert.alert('Success', 'OTP is correct!', [
+      //   {
+      //     text: 'OK',
+      //     onPress: () => {
+      //       // Navigate to the next screen or perform any other action
+      //     },
+      //   },
+      // ]);
     } catch (error) {
       // If verification fails, display an error message
       console.error('Error verifying OTP:', error.message);

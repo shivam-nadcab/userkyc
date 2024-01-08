@@ -62,7 +62,7 @@ const Login = ({navigation}) => {
       setPhoneNumber('');
       console.log('Navigating to DetailsScreen'); // Add a log statement
       // navigation.navigate('DetailsScreen', {confirmation, phoneNumber});
-      navigation.navigate('OtpScreen', {confirmation});
+      navigation.navigate('DetailsScreen', {confirmation});
 
     } catch (error) {
       console.error('Error sending OTP:', error.message);

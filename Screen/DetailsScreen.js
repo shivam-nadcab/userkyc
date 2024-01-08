@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Alert, ActivityIndicator} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {TextInput} from 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
@@ -41,19 +41,20 @@ const DetailsScreen = ({route}) => {
       );
       console.log(otp, 'otttt');
       await auth().signInWithCredential(credential);
+      navigation.navigate('HomeScreen');
 
-      Alert.alert('Success', 'OTP is correct!', [
-        {
-          text: 'OK',
-          onPress: () => {
-            if (navigation) {
-              navigation.navigate('HomeScreen');
-            } else {
-              console.error('Navigation object is undefined.');
-            }
-          },
-        },
-      ]);
+      // Alert.alert('Success', 'OTP is correct!', [
+      //   {
+      //     text: 'OK',
+      //     onPress: () => {
+      //       if (navigation) {
+      //         navigation.navigate('HomeScreen');
+      //       } else {
+      //         console.error('Navigation object is undefined.');
+      //       }
+      //     },
+      //   },
+      // ]);
       // setTimeout(()=>{
 
       //   navigation.navigate('HomeScreen');

@@ -8,6 +8,8 @@ import HomeScreen from './Screen/HomeScreen';
 import PanCardVerification from './Screen/PanCardVerification';
 import AadharCardVerification from './Screen/AadharCardVerification';
 import DetailsScreen from './Screen/DetailsScreen';
+import PanCardHomeScreen from './Screen/PanCardHomeScreen';
+import Pan from './Screen/Pan';
 
 
 const Stack = createStackNavigator();
@@ -50,6 +52,17 @@ const AppNavigator = () => {
         component={AadharCardVerification}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="PanCardHomeScreen"
+        component={PanCardHomeScreen}
+        options={{ headerShown: false }}
+      />
+       <Stack.Screen
+        name="Pan"
+        component={Pan}
+        options={{ headerShown: false }}
+      />
+     
       
     </Stack.Navigator>
   );
