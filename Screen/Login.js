@@ -116,7 +116,7 @@ const Login = ({navigation}) => {
               keyboardType="numeric"
               value={phoneNumber}
               maxLength={10}
-              onChangeText={val => handlePhoneNumberChange(val)}
+              onChangeText={(val) => handlePhoneNumberChange(val)}
               onFocus={() => _onPhoneNumberPressed()}
             />
           </TouchableWithoutFeedback>

@@ -1,112 +1,145 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import RNTextDetector from "rn-text-detector";
+// import React, {useState} from 'react';
+// import {Button, StyleSheet, Text, View, Image} from 'react-native';
+// import ImagePicker from 'react-native-image-crop-picker';
+// import ProgressCircle from 'react-native-progress/Circle';
+// import TesseractOcr, {
+//   LANG_ENGLISH,
+//   useEventListener,
+// } from 'react-native-tesseract-ocr';
 
-const Pan = () => {
-    const initialState = {
-        loading: false,
-        image: null,
-        textRecognition: null,
-        toast: {
-          message: "",
-          isVisible: false,
-        },
-      };
-      
-      const [state, setState] = useState(initialState);
-      async function onPress(type: "capture" | "library") {
-        setState({ ...state, loading: true });
-        
-        try {
-          const mediaOptions = { mediaType: "image" };
-          const media = type === "capture"
-            ? await launchCamera(mediaOptions, onImageSelect)
-            : await launchImageLibrary(mediaOptions, onImageSelect);
-          
-          if (!media || !media.assets) {
-            setState({ ...state, loading: false });
-            return;
-          }
-      
-          const file = media.assets[0].uri;
-          const textRecognition = await RNTextDetector.detectFromUri(file);
-          const INFLIGHT_IT = "Inflight IT";
-          const matchText = textRecognition.findIndex((item: { text: string }) => item.text.includes(INFLIGHT_IT));
-      
-          setState({
-            ...state,
-            textRecognition,
-            image: file,
-            toast: {
-              message: matchText > -1 ? "Ohhh I love this company!!" : "",
-              isVisible: matchText > -1,
-            },
-            loading: false,
-          });
-        } catch (error) {
-          console.error("Error processing image:", error);
-          setState({ ...state, loading: false });
-        }
-      }
-      
-      async function onImageSelect(media: { assets: [{ uri: string }] }) {
-        // You can keep this function as is, or make additional improvements if needed
-        if (!media) {
-          setState({ ...state, loading: false });
-          return;
-        }
-      
-        // ... rest of the function
-      }
-            
-  return (
-    <SafeAreaView style={styles.container}>
-    <View style={styles.content}>
-     <Text style={styles.title}>RN OCR SAMPLE</Text>
-    <View style={getSpace(20)}>
-     <TouchableOpacity style={[styles.button, styles.shadow]}
-     onPress={() => onPress("capture")}>
-      <Text>Take Photo</Text>
-     </TouchableOpacity>
-    <View style={getSpace(20)}> 
-     <TouchableOpacity
-      style={[styles.button, styles.shadow]}
-      onPress={() => onPress("library")}
-     >
-      <Text>Pick a Photo</Text>
-     </TouchableOpacity>
-    </View>
-    <View style={getSpace(50)}>
-     <WrapLoading loading={state.loading}>
-      <View style={{ alignItems: "center" }}>
-       <Image style={[styles.image, styles.shadow]}
-        source={{ uri: state.image }} />
-      </View> 
-    {!!state.textRecognition && 
-     state.textRecognition.map(
-      (item: { text: string }, i: number) => (
-       <Text key={i} style={getSpace(10)}>
-        {item.text}
-       </Text>
-      ))}
-      </WrapLoading>
-     </View>
-    </View>
-    {state.toast.isVisible &&
-     ToastAndroid.showWithGravityAndOffset(
-       state.toast.message,
-       ToastAndroid.LONG,
-       ToastAndroid.BOTTOM,
-       25,
-       50
-     )}
-    </View>
-   </SafeAreaView>
+// const DEFAULT_HEIGHT = 500;
+// const DEFAULT_WITH = 600;
+// const defaultPickerOptions = {
+//   cropping: true,
+//   height: DEFAULT_HEIGHT,
+//   width: DEFAULT_WITH,
+// };
 
-  )
-}
+// function Pan() {
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [progress, setProgress] = useState(0);
+//   const [imgSrc, setImgSrc] = useState(null);
+//   const [text, setText] = useState('');
+//   useEventListener('onProgressChange', (p) => {
+//     setProgress(p.percent / 100);
+//   });
 
-export default Pan
+//   const recognizeTextFromImage = async (path) => {
+//     setIsLoading(true);
 
-const styles = StyleSheet.create({})
+//     try {
+//       const tesseractOptions = {};
+//       const recognizedText = await TesseractOcr.recognize(
+//         path,
+//         LANG_ENGLISH,
+//         tesseractOptions,
+//       );
+//       setText(recognizedText);
+//     } catch (err) {
+//       console.error(err);
+//       setText('');
+//     }
+
+//     setIsLoading(false);
+//     setProgress(0);
+//   };
+
+//   const recognizeFromPicker = async (options = defaultPickerOptions) => {
+//     try {
+//       const image = await ImagePicker.openPicker(options);
+//       setImgSrc({uri: image.path});
+//       await recognizeTextFromImage(image.path);
+//     } catch (err) {
+//       if (err.message !== 'User cancelled image selection') {
+//         console.error(err);
+//       }
+//     }
+//   };
+
+//   const recognizeFromCamera = async (options = defaultPickerOptions) => {
+//     try {
+//       const image = await ImagePicker.openCamera(options);
+//       setImgSrc({uri: image.path});
+//       await recognizeTextFromImage(image.path);
+//     } catch (err) {
+//       if (err.message !== 'User cancelled image selection') {
+//         console.error(err);
+//       }
+//     }
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.title}>Tesseract OCR example</Text>
+//       <Text style={styles.instructions}>Select an image source:</Text>
+//       <View style={styles.options}>
+//         <View style={styles.button}>
+//           <Button
+//             disabled={isLoading}
+//             title="Camera"
+//             onPress={() => {
+//               recognizeFromCamera();
+//             }}
+//           />
+//         </View>
+//         <View style={styles.button}>
+//           <Button
+//             disabled={isLoading}
+//             title="Picker"
+//             onPress={() => {
+//               recognizeFromPicker();
+//             }}
+//           />
+//         </View>
+//       </View>
+//       {imgSrc && (
+//         <View style={styles.imageContainer}>
+//           <Image style={styles.image} source={imgSrc} />
+//           {isLoading ? (
+//             <ProgressCircle showsText progress={progress} />
+//           ) : (
+//             <Text>{text}</Text>
+//           )}
+//         </View>
+//       )}
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#F5FCFF',
+//   },
+//   options: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     padding: 10,
+//   },
+//   button: {
+//     marginHorizontal: 10,
+//   },
+//   imageContainer: {
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   image: {
+//     marginVertical: 15,
+//     height: DEFAULT_HEIGHT / 2.5,
+//     width: DEFAULT_WITH / 2.5,
+//   },
+//   title: {
+//     fontSize: 20,
+//     textAlign: 'center',
+//     margin: 10,
+//   },
+//   instructions: {
+//     textAlign: 'center',
+//     color: '#333333',
+//     marginBottom: 5,
+//   },
+// });
+
+// export default Pan;
