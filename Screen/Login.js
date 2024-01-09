@@ -107,7 +107,7 @@ const Login = ({navigation}) => {
           <Text style={[styles.input2]}>+91</Text>
         </View>
         <View style={styles.inputContainer}>
-          <TouchableWithoutFeedback onPress={() => _onPhoneNumberPressed()}>
+          {/* <TouchableWithoutFeedback onPress={() => _onPhoneNumberPressed()}> */}
             
             <TextInput
               style={[styles.input]}
@@ -117,9 +117,9 @@ const Login = ({navigation}) => {
               value={phoneNumber}
               maxLength={10}
               onChangeText={(val) => handlePhoneNumberChange(val)}
-              onFocus={() => _onPhoneNumberPressed()}
+              // onFocus={() => _onPhoneNumberPressed()}
             />
-          </TouchableWithoutFeedback>
+          {/* </TouchableWithoutFeedback> */}
         </View>
         </View>
       </View>

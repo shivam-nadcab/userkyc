@@ -10,13 +10,14 @@ import AadharCardVerification from './Screen/AadharCardVerification';
 import DetailsScreen from './Screen/DetailsScreen';
 import PanCardHomeScreen from './Screen/PanCardHomeScreen';
 import Pan from './Screen/Pan';
+import Pan2 from './Screen/Pan2';
 
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="Pan2">
       <Stack.Screen
         name="DetailsScreen"
         component={DetailsScreen}
@@ -60,6 +61,11 @@ const AppNavigator = () => {
        <Stack.Screen
         name="Pan"
         component={Pan}
+        options={{ headerShown: false }}
+      />
+       <Stack.Screen
+        name="Pan2"
+        component={Pan2}
         options={{ headerShown: false }}
       />
      
