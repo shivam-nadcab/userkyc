@@ -57,7 +57,7 @@ const HomeScreen = () => {
             <TouchableOpacity
                 style={styles.sheetCard}
                 onPress={() => {
-                  navigation.navigate('PanCardHomeScreen', 
+                  navigation.navigate('MannualPanCard', 
                   // {
                   //   documentType: 'Passport', // Pass the data you want to send here
                   // }

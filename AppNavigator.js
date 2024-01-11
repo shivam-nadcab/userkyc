@@ -5,19 +5,19 @@ import Login from './Screen/Login';
 import OtpScreen from './Screen/OtpScreen';
 import KycOptionScreen from './Screen/KycOptionScreen';
 import HomeScreen from './Screen/HomeScreen';
-import PanCardVerification from './Screen/PanCardVerification';
+import PanCardVerification from './Screen/PanCardScreens/PanCardVerification';
 import AadharCardVerification from './Screen/AadharCardVerification';
 import DetailsScreen from './Screen/DetailsScreen';
 import PanCardHomeScreen from './Screen/PanCardHomeScreen';
-import Pan from './Screen/Pan';
-import Pan2 from './Screen/Pan2';
+import MannualPanCard from './Screen/PanCardScreens/MannualPanCard';
+
 
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="Pan2">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="DetailsScreen"
         component={DetailsScreen}
@@ -59,13 +59,8 @@ const AppNavigator = () => {
         options={{ headerShown: false }}
       />
        <Stack.Screen
-        name="Pan"
-        component={Pan}
-        options={{ headerShown: false }}
-      />
-       <Stack.Screen
-        name="Pan2"
-        component={Pan2}
+        name="MannualPanCard"
+        component={MannualPanCard}
         options={{ headerShown: false }}
       />
      
