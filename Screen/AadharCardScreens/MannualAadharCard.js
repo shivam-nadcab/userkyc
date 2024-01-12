@@ -34,7 +34,7 @@ import {
 //   import HomeHeader from './HomeScreen/HomeHeader';
   import FlashMessage, {showMessage} from 'react-native-flash-message';
   
-  const AadharCardVerification = props => {
+  const MannualAadharCard = props => {
     // const {user, isLoggedIn} = useSelector(state => state.auth);
     const [adhaarNumber, setadhaarNumber] = useState('');
     const [Otp, setOtp] = useState('');
@@ -425,7 +425,7 @@ import {
                 <Image
                   resizeMode="contain"
                   style={{width: '100%', height: 180}}
-                  source={require('../assets/image/adhaar-card-dummy.png')}
+                  source={require("../../assets/image/adhaar-card-dummy.png")}
                 />
               </View>
               <View>
@@ -954,5 +954,5 @@ import {
     },
   });
   
-  export default AadharCardVerification;
+  export default MannualAadharCard;
   

@@ -31,7 +31,8 @@ import {
     const [panCardError, setPanCardError] = useState('');
     const [showLoader, setShowLoader] = useState(false);
     const [dob,setDob]=useState('');
-    const[maskedAadhar,setMaskedAadhar]=useState('')
+    const [storedPanNumber,setStoredPanNumber]=useState('');
+    const [gender,setGender]=useState()
     const navigation = useNavigation();
   
     // Regular expression pattern for a valid PAN card number
@@ -113,11 +114,11 @@ import {
             setloading(true);
       
             // URL of the API endpoint
-            const apiUrl = "https://sandbox.surepass.io/api/v1/pan/pan-comprehensive";
+            const apiUrl = "https://glorious-disco-55px5gp7wx4f4qpg-8000.app.github.dev/api/validate_save_pan";
       
             // Data to be sent in the request body
             const postData = {
-              id_number: panNumber,
+              pan: panNumber,
             };
       
             // Options for the fetch request
@@ -137,11 +138,16 @@ import {
       
             if (data) {
                 console.log(data,'datatatat')
-              const { pan_number, full_name,masked_aadhaar,dob } = data.data;
+              const { pan_number, full_name,dob,gender } = data.data;
+              // let pn=pan_number.toUpperCase();
+              // console.log(pn,'pn');
+              console.log(pan_number, full_name,dob,gender,'llll')
               setPanHolderName(full_name);
-              setMaskedAadhar(masked_aadhaar)
-              setDob(dob)
+              setStoredPanNumber(pan_number);
+              setDob(dob);
+              setGender(gender);
               // Additional logic as needed
+              console.log(storedPanNumber,'kkk')
       
               setloading(false);
               // handleSaveAndNext();
@@ -179,7 +185,7 @@ import {
       }, 2000);
     }, [panNumber]);
     const handleSaveAndNext = () => {
-      navigation.navigate('kyc');
+      navigation.navigate('AadharCardVerification');
     };
   
     return (
@@ -255,94 +261,29 @@ import {
               </View>
             </View>
   
-            {panHolderName ? (
-              <>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    paddingVertical: wp(8),
-                  }}>
-                  <View
-                    style={{
-                      width: '80%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                    }}>
-                    <View>
-                      <Image
-                        source={require('../../assets/image/approved-shield.png')}
-                        style={{
-                          width: wp(6),
-                          height: wp(6),
-                        }}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        color: '#333',
-                        paddingHorizontal: 8,
-                        fontSize: 22,
-                        textTransform: 'capitalize',
-                      }}>
-                      {panHolderName}
-                    </Text>
-                  </View>
-                  {/* <View
-                    style={{
-                      width: '80%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                    }}>
-                    <View>
-                      <Image
-                        source={require('../../assets/image/approved-shield.png')}
-                        style={{
-                          width: wp(6),
-                          height: wp(6),
-                        }}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        color: '#333',
-                        paddingHorizontal: 8,
-                        fontSize: 22,
-                        textTransform: 'capitalize',
-                      }}>
-                      {dob}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      width: '80%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                    }}>
-                    <View>
-                      <Image
-                        source={require('../../assets/image/approved-shield.png')}
-                        style={{
-                          width: wp(6),
-                          height: wp(6),
-                        }}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        color: '#333',
-                        paddingHorizontal: 8,
-                        fontSize: 22,
-                        textTransform: 'capitalize',
-                      }}>
-                      {maskedAadhar}
-                    </Text>
-                  </View> */}
-                </View>
-              </>
-            ) : (
+            {panHolderName && storedPanNumber ? (
+  <>
+    <View style={styles.infoContainer}>
+      <View style={styles.infoItem}>
+        <Text style={styles.infoLabel}>Name:</Text>
+        <Text style={styles.infoText}>{panHolderName}</Text>
+      </View>
+      <View style={styles.infoItem}>
+        <Text style={styles.infoLabel}>DOB:</Text>
+        <Text style={styles.infoText}>{dob}</Text>
+      </View>
+      <View style={styles.infoItem}>
+        <Text style={styles.infoLabel}>Pan Number:</Text>
+        <Text style={styles.infoText}>{storedPanNumber}</Text>
+      </View>
+      <View style={styles.infoItem}>
+        <Text style={styles.infoLabel}>Gender:</Text>
+        <Text style={styles.infoText}>{gender}</Text>
+      </View>
+    </View>
+  </>
+)
+: (
               <>
                 <View style={styles.infowrapper}>
                   <Text style={{color: '#000', marginBottom: wp(3)}}>Note</Text>
@@ -577,6 +518,28 @@ import {
       color: '#666',
       fontSize: wp(3),
       lineHeight: wp(5),
+    },
+    infoContainer: {
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      paddingVertical: wp(8),
+    },
+    infoItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: wp(2),
+      paddingLeft:wp(15)
+    },
+    infoLabel: {
+      color: '#333',
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginRight: wp(2),
+    },
+    infoText: {
+      color: '#333',
+      fontSize: 18,
+      // textTransform: 'capitalize',
     },
   });
   

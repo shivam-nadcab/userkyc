@@ -6,10 +6,11 @@ import OtpScreen from './Screen/OtpScreen';
 import KycOptionScreen from './Screen/KycOptionScreen';
 import HomeScreen from './Screen/HomeScreen';
 import PanCardVerification from './Screen/PanCardScreens/PanCardVerification';
-import AadharCardVerification from './Screen/AadharCardVerification';
 import DetailsScreen from './Screen/DetailsScreen';
 import PanCardHomeScreen from './Screen/PanCardHomeScreen';
 import MannualPanCard from './Screen/PanCardScreens/MannualPanCard';
+import MannualAadharCard from './Screen/AadharCardScreens/MannualAadharCard';
+import AadharCardVerification from './Screen/AadharCardScreens/AadharCardVerification';
 
 
 
@@ -63,8 +64,11 @@ const AppNavigator = () => {
         component={MannualPanCard}
         options={{ headerShown: false }}
       />
-     
-      
+       <Stack.Screen
+        name="MannualAadharCard"
+        component={MannualAadharCard}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
