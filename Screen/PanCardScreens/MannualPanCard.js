@@ -185,7 +185,9 @@ import {
       }, 2000);
     }, [panNumber]);
     const handleSaveAndNext = () => {
-      navigation.navigate('AadharCardVerification');
+     setTimeout(()=>{
+      navigation.navigate('HomeScreen');
+     },2000) 
     };
   
     return (

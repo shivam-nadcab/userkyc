@@ -119,10 +119,10 @@ const HomeScreen = () => {
               <TouchableOpacity
                 style={styles.sheetCard}
                 onPress={() => {
-                  navigation.navigate('ManualKycUploadDoc', {
+                  navigation.navigate('PassportVerification', {
                     documentType: 'Passport', // Pass the data you want to send here
                   });
-                  closeDocSheet(); // Optionally close the bottom sheet
+                  // closeDocSheet(); // Optionally close the bottom sheet
                 }}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image
@@ -147,10 +147,10 @@ const HomeScreen = () => {
               <TouchableOpacity
                 style={styles.sheetCard}
                 onPress={() => {
-                  navigation.navigate('ManualKycUploadDoc', {
+                  navigation.navigate('VoterIdVerificationScreen', {
                     documentType: 'Voter ID',
                   });
-                  closeDocSheet();
+                  // closeDocSheet();
                 }}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Image

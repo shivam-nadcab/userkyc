@@ -1,6 +1,6 @@
 // AppNavigator.js
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import Login from './Screen/Login';
 import OtpScreen from './Screen/OtpScreen';
 import KycOptionScreen from './Screen/KycOptionScreen';
@@ -11,63 +11,73 @@ import PanCardHomeScreen from './Screen/PanCardHomeScreen';
 import MannualPanCard from './Screen/PanCardScreens/MannualPanCard';
 import MannualAadharCard from './Screen/AadharCardScreens/MannualAadharCard';
 import AadharCardVerification from './Screen/AadharCardScreens/AadharCardVerification';
-
-
+import PassportVerification from './Screen/PassportScreens/PassportVerification';
+import VoterIdVerificationScreen from './Screen/VoterIdScreens/VoterIdVerificationScreen';
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
-        name="DetailsScreen"
-        component={DetailsScreen}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator initialRouteName="AadharCardVerificationn">
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="DetailsScreen"
+        component={DetailsScreen}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="OtpScreen"
         component={OtpScreen}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="KycOptionScreen"
         component={KycOptionScreen}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="PanCardVerification"
         component={PanCardVerification}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="AadharCardVerification"
         component={AadharCardVerification}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="PanCardHomeScreen"
         component={PanCardHomeScreen}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="MannualPanCard"
         component={MannualPanCard}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="MannualAadharCard"
         component={MannualAadharCard}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PassportVerification"
+        component={PassportVerification}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="VoterIdVerificationScreen"
+        component={VoterIdVerificationScreen}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

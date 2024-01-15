@@ -28,7 +28,7 @@ import {
 // import HomeHeader from '../components/HomeScreen/HomeHeader';
 import LinearGradient from 'react-native-linear-gradient';
 
-const DocumentVerificationScreen = () => {
+const AadharCardVerification = () => {
   const [frontPhoto, setFrontPhoto] = useState();
   const [backPhoto, setBackPhoto] = useState();
   const [visible, setVisible] = useState(false);
@@ -169,26 +169,7 @@ const DocumentVerificationScreen = () => {
       start={{x: 0, y: 0}}
       end={{x: 1, y: 1}}
       style={{flex: 1}}>
-        {/* <StatusBar backgroundColor="#f3f4f8" barStyle="dark-content" /> */}
         <View style={styles.header}>
-          {/* <MaterialCommunityIcons
-            name="keyboard-backspace"
-            size={30}
-            color={'#000'}
-            onPress={() => navigation.goBack()}
-          /> */}
-          {/* <HomeHeader
-            icons={true}
-            iconName={'arrow-left'}
-            size={wp(7)}
-            // title={'Verify KYC'}
-            // TextTitle={true}
-            // RightHeaderName={true}
-            // RheaderName={'Done'}
-            // TextTitleStyle={{textAlign: 'left'}}
-            // leftIocnsSubScreen={false}
-            // LeftIconsName={'magnify'}
-          /> */}
         </View>
         <ScrollView>
           <>
@@ -410,7 +391,7 @@ const DocumentVerificationScreen = () => {
   );
 };
 
-export default DocumentVerificationScreen;
+export default AadharCardVerification;
 
 const styles = StyleSheet.create({
   container: {
